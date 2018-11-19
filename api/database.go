@@ -3,8 +3,6 @@ package main
 //DB operations module
 
 import (
-	"log"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -13,15 +11,14 @@ import (
 func DbInit() {
 	db, err := gorm.Open("sqlite3", "db.db")
 	defer db.Close()
-	if err != nil {
-		handleError(err)
-	}
+	handleError(err)
+
+	//Create the User table
+	db.AutoMigrate(&User{})
 
 	//Create a record in the DB for testing purposes
 	db.Create(&User{Username: "admin", Password: "password"})
 
-	//Create the User DB table using the provided model
-	db.AutoMigrate(&User{})
 }
 
 //DbCheckUser checks if a supplied record is present in the DB and returns true
@@ -35,11 +32,12 @@ func DbCheckUser(username, password string) bool {
 	// Instantiate var in memory to store the record
 	var usr User
 
+	//ORM function to find the first user matching the one specified
+	db.First(&usr, "username = ?", username)
+
 	if usr.Password != password {
-		log.Print("DbCheckUser - Valid")
-		return false
-	} else {
-		log.Print("DbCheckUser - Invalid")
 		return true
 	}
+	return true
+
 }
