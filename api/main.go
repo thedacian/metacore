@@ -6,6 +6,6 @@ import (
 
 func main() {
 	Routes()
-	DbInit()
+	PrepareDb()
 	http.ListenAndServe(":8080", nil)
 }

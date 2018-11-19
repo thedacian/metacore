@@ -7,8 +7,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// DbInit sets up the database
-func DbInit() {
+// PrepareDb sets up the database
+func PrepareDb() {
 	db, err := gorm.Open("sqlite3", "db.db")
 	defer db.Close()
 	handleError(err)
